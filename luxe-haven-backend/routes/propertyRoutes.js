@@ -12,25 +12,10 @@ const {
 
 const router = express.Router();
 
-// PUBLIC: get all properties
-// GET /api/properties
+// ✅ PUBLIC: get all properties
 router.get("/", getAllPropertiesController);
 
-// PUBLIC: get one property
-// GET /api/properties/:id
-router.get("/:id", getPropertyByIdController);
-
-// SELLER: create new property
-// POST /api/properties
-router.post(
-  "/",
-  authRequired,
-  requireRole("seller"),
-  createPropertyController
-);
-
-// SELLER: view own properties
-// GET /api/properties/mine
+// ✅ SELLER: view own properties (MUST BE BEFORE "/:id")
 router.get(
   "/mine",
   authRequired,
@@ -38,8 +23,18 @@ router.get(
   getMyPropertiesController
 );
 
-// SELLER/ADMIN: update property
-// PUT /api/properties/:id
+// ✅ PUBLIC: get one property
+router.get("/:id", getPropertyByIdController);
+
+// ✅ SELLER: create new property
+router.post(
+  "/",
+  authRequired,
+  requireRole("seller"),
+  createPropertyController
+);
+
+// ✅ SELLER/ADMIN: update property
 router.put(
   "/:id",
   authRequired,
@@ -47,8 +42,7 @@ router.put(
   updatePropertyController
 );
 
-// SELLER/ADMIN: delete property
-// DELETE /api/properties/:id
+// ✅ SELLER/ADMIN: delete property
 router.delete(
   "/:id",
   authRequired,
