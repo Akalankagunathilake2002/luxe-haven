@@ -1,6 +1,7 @@
-// app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "LuxeHaven",
@@ -13,34 +14,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
+        className="h-full"
         style={{
-          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-          backgroundColor: "#0f172a",
-          color: "#f9fafb",
-          minHeight: "100vh",
+          fontFamily:
+            "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+          backgroundColor: "#f8fafc", // light background
+          color: "#0f172a",
+          margin: 0,
         }}
       >
-        <main
+        <div
           style={{
-            maxWidth: 960,
-            margin: "0 auto",
-            padding: "2rem 1.5rem",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <h1
+          <Header />
+
+          {/* 🔥 THIS IS THE KEY FIX */}
+          <main
             style={{
-              fontSize: "2rem",
-              fontWeight: 700,
-              marginBottom: "1.5rem",
-              textAlign: "center",
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "2rem 1rem",
             }}
           >
-            LuxeHaven
-          </h1>
-          {children}
-        </main>
+            {children}
+          </main>
+
+          <Footer />
+        </div>
       </body>
     </html>
   );

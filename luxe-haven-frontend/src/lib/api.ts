@@ -1,4 +1,4 @@
-// lib/api.ts
+// src/lib/api.ts
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
@@ -25,4 +25,19 @@ export async function apiRequest<T>(
   }
 
   return res.json();
+}
+
+// ✅ NEW: use token automatically
+export async function apiAuthRequest<T>(
+  path: string,
+  token: string,
+  options: RequestInit = {}
+): Promise<T> {
+  return apiRequest<T>(path, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }

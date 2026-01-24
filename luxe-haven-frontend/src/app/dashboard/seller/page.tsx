@@ -1,69 +1,65 @@
-// app/dashboard/seller/page.tsx
+// src/app/dashboard/seller/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { apiRequest } from "@/lib/api";
+import { clearAuth, getToken } from "@/lib/auth";
+import { useEffect } from "react";
 
-interface SellerResponse {
-  message: string;
-  user: {
-    userId: number;
-    role: string;
-  };
-}
-
-export default function SellerDashboard() {
+export default function SellerDashboardHome() {
   const router = useRouter();
-  const [data, setData] = useState<SellerResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
-
-    if (!token) {
-      router.push("/");
-      return;
-    }
-
-    apiRequest<SellerResponse>("/api/dashboard/seller", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(setData)
-      .catch((err) => {
-        setError(err.message || "Failed to load seller dashboard");
-        setTimeout(() => router.push("/"), 1200);
-      });
+    const token = getToken();
+    if (!token) router.push("/");
   }, [router]);
 
   return (
-    <div>
-      <h2 style={{ fontSize: "1.5rem", marginBottom: "0.75rem" }}>
+    <div style={{ display: "grid", gap: "1rem" }}>
+      <h2 style={{ fontSize: "1.6rem", marginBottom: "0.5rem" }}>
         Seller Dashboard
       </h2>
-      {error && <p style={{ color: "#fca5a5" }}>{error}</p>}
-      {!error && !data && <p>Loading...</p>}
-      {data && (
-        <div
-          style={{
-            marginTop: "1rem",
-            padding: "1rem",
-            borderRadius: "0.75rem",
-            background: "#020617",
-            border: "1px solid #1f2937",
-          }}
-        >
-          <p>{data.message}</p>
-          <p style={{ marginTop: "0.5rem", fontSize: "0.85rem", opacity: 0.8 }}>
-            userId: {data.user.userId} | role: {data.user.role}
-          </p>
+
+      <div style={cardStyle}>
+        <p style={{ opacity: 0.9 }}>
+          Manage your listings here.
+        </p>
+
+        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+          <Link href="/dashboard/seller/properties" style={btnStyle}>
+            My Properties
+          </Link>
+
+          <button
+            onClick={() => {
+              clearAuth();
+              router.push("/");
+            }}
+            style={{ ...btnStyle, background: "#334155" }}
+          >
+            Logout
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
+
+const cardStyle: React.CSSProperties = {
+  padding: "1rem",
+  borderRadius: "0.9rem",
+  background: "#020617",
+  border: "1px solid #1f2937",
+};
+
+const btnStyle: React.CSSProperties = {
+  padding: "0.6rem 1rem",
+  borderRadius: "999px",
+  border: "none",
+  background: "#22c55e",
+  color: "#020617",
+  fontWeight: 700,
+  cursor: "pointer",
+  textDecoration: "none",
+  display: "inline-block",
+};
