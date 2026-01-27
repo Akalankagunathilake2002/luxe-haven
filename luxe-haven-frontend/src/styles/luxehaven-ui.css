@@ -1,0 +1,230 @@
+/* src/styles/luxehaven-ui.css */
+
+/* ====== Container: match homepage width ====== */
+.lh-container {
+  width: min(1400px, 94%);
+  margin: 0 auto;
+}
+
+/* Page wrapper (dashboard pages) */
+.lh-page {
+  width: min(1400px, 94%);
+  margin: 0 auto;
+  padding: 26px 0 60px;
+}
+
+/* Topbar / header panel */
+.lh-topbar {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 18px 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(176, 122, 82, 0.14);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(247, 241, 234, 0.55) 100%
+  );
+  box-shadow: 0 18px 50px rgba(176, 122, 82, 0.12);
+}
+
+.lh-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(176, 122, 82, 0.16);
+  color: #4a3c2d;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lh-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #b07a52, #9a6643);
+  box-shadow: 0 0 0 6px rgba(176, 122, 82, 0.12);
+}
+
+.lh-title {
+  margin-top: 12px;
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  color: #1b1b1b;
+  line-height: 1.1;
+}
+
+.lh-subtitle {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(27, 27, 27, 0.65);
+  max-width: 720px;
+}
+
+/* ====== Cards ====== */
+.lh-card {
+  width: 100%;
+  margin-top: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(176, 122, 82, 0.14);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 16px;
+  box-shadow: 0 18px 55px rgba(176, 122, 82, 0.12);
+}
+
+/* ====== Stats Grid (3 cards) ====== */
+.lh-grid-3 {
+  width: 100%;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lh-stat {
+  border-radius: 22px;
+  border: 1px solid rgba(176, 122, 82, 0.14);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05);
+}
+
+.lh-stat-label {
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(27, 27, 27, 0.55);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lh-stat-value {
+  margin-top: 10px;
+  font-size: 30px;
+  font-weight: 950;
+  color: #1b1b1b;
+}
+
+.lh-stat-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(154, 102, 67, 0.9);
+  font-weight: 800;
+}
+
+/* ====== Buttons ====== */
+.lh-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.lh-btn-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 950;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #b07a52 0%, #9a6643 100%);
+  box-shadow: 0 10px 25px rgba(176, 122, 82, 0.22);
+}
+
+.lh-btn-ghost {
+  border: 1px solid rgba(176, 122, 82, 0.22);
+  border-radius: 999px;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 950;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  color: #9a6643;
+}
+
+.lh-btn-outline {
+  border: 1px solid rgba(176, 122, 82, 0.25);
+  border-radius: 999px;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 950;
+  cursor: pointer;
+  background: rgba(251, 247, 242, 0.9);
+  color: #4a3c2d;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 1024px) {
+  .lh-grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .lh-title {
+    font-size: 30px;
+  }
+}
+/* ===== Forms ===== */
+.lh-form {
+  display: grid;
+  gap: 12px;
+}
+
+.lh-field {
+  display: grid;
+  gap: 8px;
+}
+
+.lh-label {
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(27, 27, 27, 0.75);
+  letter-spacing: 0.02em;
+}
+
+.lh-input,
+.lh-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(176, 122, 82, 0.22);
+  background: rgba(251, 247, 242, 0.9);
+  color: #1b1b1b;
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.lh-input:focus,
+.lh-textarea:focus {
+  border-color: rgba(176, 122, 82, 0.55);
+  box-shadow: 0 0 0 4px rgba(176, 122, 82, 0.14);
+}
+
+.lh-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Alerts (if not already added) */
+.lh-alert-error {
+  margin-top: 14px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  color: #7a1d1d;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 800;
+}

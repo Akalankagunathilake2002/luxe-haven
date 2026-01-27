@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "../styles/luxehaven-ui.css";
+
 
 /* make sure the app can stretch full height */
 html,

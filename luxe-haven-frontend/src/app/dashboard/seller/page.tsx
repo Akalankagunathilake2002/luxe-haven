@@ -11,22 +11,25 @@ export default function SellerDashboardHome() {
 
   useEffect(() => {
     const token = getToken();
-    if (!token) router.push("/");
+    if (!token) router.push("/login");
   }, [router]);
 
   return (
-    <div style={{ display: "grid", gap: "1rem" }}>
-      <h2 style={{ fontSize: "1.6rem", marginBottom: "0.5rem" }}>
-        Seller Dashboard
-      </h2>
+    <div className="lh-page">
+      <div className="lh-topbar">
+        <div>
+          <div className="lh-kicker">
+            <span className="lh-dot" />
+            Seller Dashboard
+          </div>
+          <h1 className="lh-title">Welcome back</h1>
+          <p className="lh-subtitle">
+            Manage your property listings and track performance.
+          </p>
+        </div>
 
-      <div style={cardStyle}>
-        <p style={{ opacity: 0.9 }}>
-          Manage your listings here.
-        </p>
-
-        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-          <Link href="/dashboard/seller/properties" style={btnStyle}>
+        <div className="lh-actions">
+          <Link href="/dashboard/seller/properties" className="lh-btn-primary">
             My Properties
           </Link>
 
@@ -35,31 +38,19 @@ export default function SellerDashboardHome() {
               clearAuth();
               router.push("/");
             }}
-            style={{ ...btnStyle, background: "#334155" }}
+            className="lh-btn-ghost"
           >
             Logout
           </button>
         </div>
       </div>
+
+      <div className="lh-card">
+        <h3 className="lh-card-title">Quick Overview</h3>
+        <p className="lh-card-sub">
+          View, create, and manage your property listings from here.
+        </p>
+      </div>
     </div>
   );
 }
-
-const cardStyle: React.CSSProperties = {
-  padding: "1rem",
-  borderRadius: "0.9rem",
-  background: "#020617",
-  border: "1px solid #1f2937",
-};
-
-const btnStyle: React.CSSProperties = {
-  padding: "0.6rem 1rem",
-  borderRadius: "999px",
-  border: "none",
-  background: "#22c55e",
-  color: "#020617",
-  fontWeight: 700,
-  cursor: "pointer",
-  textDecoration: "none",
-  display: "inline-block",
-};

@@ -49,7 +49,7 @@ function Placeholder({ label }: { label: string }) {
     <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[#efe6dd] to-[#e0d4c7] px-4 text-center">
       <div>
         <div className="text-sm font-extrabold text-black/65">{label}</div>
-        <div className="mt-1 text-xs text-black/55">Paste your URL / add your file in /public.</div>
+        <div className="mt-1 text-xs text-black/55">Video .</div>
       </div>
     </div>
   );
@@ -222,7 +222,7 @@ export default function Page() {
         setShowAuthAlert(true);
         setAlertShown(true);
       }
-    }, 10000);
+    }, 100);
     return () => clearTimeout(timer);
   }, [alertShown]);
 

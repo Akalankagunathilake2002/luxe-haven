@@ -1,58 +1,50 @@
-// app/signup/page.tsx
+// src/app/login/page.tsx
 "use client";
 
-import React, { FormEvent, useMemo, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api";
 
-interface SignupResponse {
+interface LoginResponse {
   message: string;
+  token: string;
   user: {
     id: number;
     name: string;
     email: string;
     role: "admin" | "seller" | "buyer";
   };
+  dashboardPath: string;
 }
 
-export default function SignupPage() {
+export default function LoginPage() {
   const router = useRouter();
 
-  const [name, setName] = useState("Test Buyer");
-  const [email, setEmail] = useState("buyer@example.com");
-  const [password, setPassword] = useState("Buyer123!");
+  const [email, setEmail] = useState("admin1@example.com");
+  const [password, setPassword] = useState("Admin123!");
   const [showPw, setShowPw] = useState(false);
 
-  const [role, setRole] = useState<"admin" | "seller" | "buyer">("buyer");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  const roleOptions = useMemo(
-    () => [
-      { value: "buyer" as const, label: "Buyer", hint: "Save favorites & get recommendations" },
-      { value: "seller" as const, label: "Seller", hint: "List and manage properties easily" },
-      { value: "admin" as const, label: "Admin", hint: "Platform control & approvals" },
-    ],
-    []
-  );
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    setSuccess(null);
     setLoading(true);
 
     try {
-      const data = await apiRequest<SignupResponse>("/api/auth/signup", {
+      const data = await apiRequest<LoginResponse>("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ email, password }),
       });
 
-      setSuccess(data.message || "Account created successfully!");
-      setTimeout(() => router.push("/login"), 900);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.user.role);
+
+      // ✅ use backend path (make sure backend returns /dashboard/...)
+      router.push(data.dashboardPath || "/");
     } catch (err: any) {
-      setError(err?.message || "Signup failed");
+      setError(err?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -60,30 +52,48 @@ export default function SignupPage() {
 
   return (
     <div style={pageWrap}>
-      <div className="signup-shell" style={shell}>
-        {/* Left premium stripe */}
-        <div style={stripe} aria-hidden="true">
+      <div className="login-shell" style={shell}>
+        {/* Brand / left panel */}
+        <div style={stripe}>
           <div style={stripeGlowTop} />
           <div style={stripeGlowBottom} />
-          <div style={stripeTextWrap}>
+
+          <div style={{ position: "relative" }}>
             <div style={badge}>
               <span style={dot} />
               PREMIUM REAL ESTATE
             </div>
+
             <div style={brandTitle}>
               Luxe<span style={{ color: "#b07a52" }}>Haven</span>
             </div>
+
             <div style={brandSub}>
-              Create your account to save properties, contact agents, and manage listings.
+              Sign in to save properties, get personalized recommendations, and access your dashboard.
+            </div>
+
+            <div style={miniStats}>
+              <div style={statCard}>
+                <div style={statNum}>500+</div>
+                <div style={statLbl}>Premium Properties</div>
+              </div>
+              <div style={statCard}>
+                <div style={statNum}>98%</div>
+                <div style={statLbl}>Satisfaction</div>
+              </div>
+              <div style={statCard}>
+                <div style={statNum}>25+</div>
+                <div style={statLbl}>Cities</div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Form card */}
+        {/* Form */}
         <div style={card}>
           <div style={{ marginBottom: 18 }}>
-            <div style={title}>Create account</div>
-            <div style={subtitle}>Join LuxeHaven in under a minute.</div>
+            <div style={title}>Welcome back</div>
+            <div style={subtitle}>Log in to continue your journey.</div>
           </div>
 
           {error && (
@@ -91,37 +101,20 @@ export default function SignupPage() {
               <strong style={{ fontWeight: 800 }}>Error:</strong> {error}
             </div>
           )}
-          {success && (
-            <div style={alert("success")}>
-              <strong style={{ fontWeight: 800 }}>Success:</strong> {success}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} style={{ display: "grid", gap: 14 }}>
-            <div style={fieldGrid}>
-              <label style={label}>
-                Full name
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  style={input}
-                  placeholder="Your name"
-                  required
-                />
-              </label>
-
-              <label style={label}>
-                Email address
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={input}
-                  placeholder="you@example.com"
-                  required
-                />
-              </label>
-            </div>
+            <label style={label}>
+              Email address
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={input}
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+            </label>
 
             <label style={label}>
               Password
@@ -131,7 +124,8 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   style={{ ...input, paddingRight: 64, marginTop: 0 }}
-                  placeholder="Create a strong password"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
                   required
                 />
                 <button
@@ -143,41 +137,23 @@ export default function SignupPage() {
                   {showPw ? "Hide" : "Show"}
                 </button>
               </div>
-              <div style={helper}>Use 8+ characters with a mix of letters, numbers, and symbols.</div>
-            </label>
-
-            <label style={label}>
-              Role
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as "admin" | "seller" | "buyer")}
-                style={select}
-              >
-                {roleOptions.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.label}
-                  </option>
-                ))}
-              </select>
-
-              <div style={roleHint}>{roleOptions.find((r) => r.value === role)?.hint}</div>
             </label>
 
             <button type="submit" disabled={loading} style={primaryBtn(loading)}>
               {loading ? (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
                   <span style={spinner} />
-                  Creating...
+                  Signing in...
                 </span>
               ) : (
-                "Create account"
+                "Log In"
               )}
             </button>
 
             <div style={bottomRow}>
-              <span style={{ color: "rgba(27,27,27,.6)" }}>Already have an account?</span>
-              <button type="button" onClick={() => router.push("/login")} style={linkBtn}>
-                Log in
+              <span style={{ color: "rgba(27,27,27,.6)" }}>Don&apos;t have an account?</span>
+              <button type="button" onClick={() => router.push("/signup")} style={linkBtn}>
+                Create one
               </button>
             </div>
 
@@ -189,7 +165,6 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* ✅ Correct way: JSX styles (no TS "void" issues) */}
       <style jsx>{`
         @keyframes spin {
           to {
@@ -197,8 +172,8 @@ export default function SignupPage() {
           }
         }
 
-        @media (min-width: 900px) {
-          .signup-shell {
+        @media (min-width: 980px) {
+          .login-shell {
             grid-template-columns: 0.95fr 1.05fr;
           }
         }
@@ -260,10 +235,6 @@ const stripeGlowBottom: React.CSSProperties = {
   filter: "blur(6px)",
 };
 
-const stripeTextWrap: React.CSSProperties = {
-  position: "relative",
-};
-
 const badge: React.CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
@@ -303,6 +274,34 @@ const brandSub: React.CSSProperties = {
   maxWidth: 520,
 };
 
+const miniStats: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gap: 10,
+  marginTop: 18,
+};
+
+const statCard: React.CSSProperties = {
+  borderRadius: 16,
+  border: "1px solid rgba(176, 122, 82, 0.14)",
+  background: "rgba(255,255,255,.65)",
+  padding: "12px 10px",
+  textAlign: "center",
+};
+
+const statNum: React.CSSProperties = {
+  fontSize: 18,
+  fontWeight: 950,
+  color: "#2b221b",
+};
+
+const statLbl: React.CSSProperties = {
+  marginTop: 4,
+  fontSize: 11,
+  fontWeight: 800,
+  color: "rgba(154,102,67,.9)",
+};
+
 const card: React.CSSProperties = {
   padding: "26px 22px",
   background: "rgba(255,255,255,.78)",
@@ -320,12 +319,6 @@ const subtitle: React.CSSProperties = {
   fontSize: 14,
   color: "rgba(27,27,27,.62)",
   lineHeight: 1.6,
-};
-
-const fieldGrid: React.CSSProperties = {
-  display: "grid",
-  gap: 14,
-  gridTemplateColumns: "1fr",
 };
 
 const label: React.CSSProperties = {
@@ -346,24 +339,6 @@ const input: React.CSSProperties = {
   fontSize: 14,
   outline: "none",
   boxShadow: "0 1px 0 rgba(0,0,0,.02) inset",
-};
-
-const select: React.CSSProperties = {
-  ...input,
-  cursor: "pointer",
-};
-
-const helper: React.CSSProperties = {
-  fontSize: 12,
-  color: "rgba(27,27,27,.55)",
-  marginTop: -2,
-};
-
-const roleHint: React.CSSProperties = {
-  fontSize: 12,
-  color: "rgba(154,102,67,.95)",
-  fontWeight: 700,
-  marginTop: -2,
 };
 
 const pwWrap: React.CSSProperties = {

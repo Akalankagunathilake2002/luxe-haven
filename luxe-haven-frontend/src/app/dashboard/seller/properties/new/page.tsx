@@ -1,4 +1,3 @@
-// src/app/dashboard/seller/properties/new/page.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -10,37 +9,56 @@ export default function NewPropertyPage() {
   const router = useRouter();
 
   return (
-    <div style={{ display: "grid", gap: "1rem" }}>
-      <h2 style={{ fontSize: "1.6rem" }}>Create New Listing</h2>
+    <div className="lh-page">
+      {/* Topbar */}
+      <div className="lh-topbar">
+        <div>
+          <div className="lh-kicker">
+            <span className="lh-dot" />
+            Seller • Create
+          </div>
+          <h1 className="lh-title">Create New Listing</h1>
+          <p className="lh-subtitle">Add a new property with price, location, and description.</p>
+        </div>
 
-      <div style={cardStyle}>
-        <PropertyForm
-          submitLabel="Create Listing"
-          onSubmit={async (values) => {
-            const token = getToken();
-            if (!token) {
-              router.push("/");
-              return;
-            }
+        <div className="lh-actions">
+          <button
+            onClick={() => router.push("/dashboard/seller/properties")}
+            className="lh-btn-ghost"
+            type="button"
+          >
+            ← Back to Listings
+          </button>
+        </div>
+      </div>
 
-            await createProperty(token, {
-              title: values.title.trim(),
-              price: Number(values.price),
-              location: values.location.trim(),
-              description: values.description.trim() || undefined,
-            });
+      {/* Form Card */}
+      <div className="lh-card">
+        <div className="lh-card-title">Property Details</div>
+        <div className="lh-card-sub">Fill the form and publish your listing.</div>
 
-            router.push("/dashboard/seller/properties");
-          }}
-        />
+        <div style={{ marginTop: 14 }}>
+          <PropertyForm
+            submitLabel="Create Listing"
+            onSubmit={async (values) => {
+              const token = getToken();
+              if (!token) {
+                router.push("/login");
+                return;
+              }
+
+              await createProperty(token, {
+                title: values.title.trim(),
+                price: Number(values.price),
+                location: values.location.trim(),
+                description: values.description.trim() || undefined,
+              });
+
+              router.push("/dashboard/seller/properties");
+            }}
+          />
+        </div>
       </div>
     </div>
   );
 }
-
-const cardStyle: React.CSSProperties = {
-  padding: "1rem",
-  borderRadius: "0.9rem",
-  background: "#020617",
-  border: "1px solid #1f2937",
-};
