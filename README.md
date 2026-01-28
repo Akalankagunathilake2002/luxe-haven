@@ -1,5 +1,11 @@
+
+
+
+
+
 # LuxeHaven 🏡✨
 A role-based real estate web application where **Sellers** can post property listings, **Buyers** can browse and purchase, and **Admins** can manage users and monitor platform activity.
+<img width="2918" height="1664" alt="realE" src="https://github.com/user-attachments/assets/2e8f054c-39c6-412e-85f9-7ffe432ca275" />
 
 ---
 
